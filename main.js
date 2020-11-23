@@ -202,16 +202,17 @@ class ServiceNowAdapter extends EventEmitter {
       } else {
           if (response && response.body) {
               const bodyObject = JSON.parse(response.body);
-              const tickets = bodyObject.result.map(ticket => ({
-                  change_ticket_number: ticket.number,
-                  active: ticket.active,
-                  priority: ticket.priority,
-                  description: ticket.description,
-                  work_start: ticket.work_start,
-                  work_end: ticket.work_end,
-                  change_ticket_key: ticket.sys_id
-              }));
-              callback(tickets);
+              const ticket = bodyObject.result;
+              const genericTicket = {
+                change_ticket_number: ticket.number,
+                active: ticket.active,
+                priority: ticket.priority,
+                description: ticket.description,
+                work_start: ticket.work_start,
+                work_end: ticket.work_end,
+                change_ticket_key: ticket.sys_id
+              };
+              callback(genericTicket);
           } else {
             const errorMessage = `ServiceNow (id: ${this.id}): Unexpected error when trying to post a new record.`;
             log.error(errorMessage);
